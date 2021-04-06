@@ -5,10 +5,18 @@ jobs:
     runs-on: ubuntu-latest
     name: CI migration
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Check owner
         id: owner
-        uses: actions/migration-ci-action@v0.0.1
+        uses: ./migration-action
         with:
           owner: 'agneum'
+# Public actions
+#      - name: Check owner
+#        id: owner
+#        uses: actions/migration-ci-action@v0.0.1
+#        with:
+#          owner: 'agneum'
       - name: Get the output status
         run: echo "Status ${{ steps.owner.outputs.status }}"
