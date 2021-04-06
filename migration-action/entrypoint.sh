@@ -6,9 +6,10 @@ JSON_DATA=$(jq -n \
   --arg owner "$INPUT_OWNER" \
   --arg repo "$INPUT_REPO" \
   --arg ref "$INPUT_REF" \
-  '{owner: $owner, repo: $repo, ref: $ref}')
+  --arg commands "$INPUT_COMMANDS" \
+  '{owner: $owner, repo: $repo, ref: $ref, commands: $commands | split("\n")}')
 
-echo "${INPUT_COMMANDS}"
+echo $JSON_DATA
 
 curl --location --request POST "${CI_ENDPOINT}" \
 --header 'Authorization-Token: secret_token' \
