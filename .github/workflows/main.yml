@@ -18,7 +18,7 @@ jobs:
             sqitch up
             echo 'Migration has been completed'
         env:
-          CI_ENDPOINT: "http://127.0.0.1"
+          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
 
       # Public actions
       #      - name: Check owner
