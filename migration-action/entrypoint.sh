@@ -9,7 +9,7 @@ JSON_DATA=$(jq -n \
 
 echo $JSON_DATA
 
-curl --location --request POST "${CI_ENDPOINT}" \
+curl -v --location --request POST "${CI_ENDPOINT}" \
 --header 'Authorization-Token: "${SECRET_TOKEN}"' \
 --header 'Content-Type: application/json' \
 --data-raw "${JSON_DATA}"
