@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
-JSON_DATA=$(jq -n \
+JSON_DATA=$(jq -n -c \
   --arg owner "$INPUT_OWNER" \
   --arg repo "$INPUT_REPO" \
   --arg ref "$INPUT_REF" \
@@ -12,9 +12,7 @@ echo $JSON_DATA
 curl -v --location --request POST "${CI_ENDPOINT}" \
 --header "Authorization-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
---data '{ "repo": { "owner": "agneum", "repo": "runci", "ref": "master" }, "commands": [ "sqitch up", "echo Migration has been completed" ] }'
-
-#"${JSON_DATA}"
+--data "${JSON_DATA}"
 
 status="OK"
 echo "::set-output name=status::$status"
