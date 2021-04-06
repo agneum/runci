@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  migration_job:
+    runs-on: ubuntu-latest
+    name: CI migration
+    steps:
+      - name: Check owner
+        id: owner
+        uses: actions/migration-ci-action@v0.0.1
+        with:
+          owner: 'agneum'
+      - name: Get the output status
+        run: echo "Status ${{ steps.owner.outputs.status }}"
