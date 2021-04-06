@@ -1,4 +1,4 @@
-on: [push]
+on: [ push ]
 
 jobs:
   migration_job:
@@ -12,11 +12,19 @@ jobs:
         uses: ./migration-action
         with:
           owner: 'agneum'
-# Public actions
-#      - name: Check owner
-#        id: owner
-#        uses: actions/migration-ci-action@v0.0.1
-#        with:
-#          owner: 'agneum'
+          repo: 'runci'
+          ref: 'master'
+          commands:  |
+            sqitch up
+            echo 'Migration has been completed'
+        env:
+          CI_ENDPOINT: "http://127.0.0.1"
+
+      # Public actions
+      #      - name: Check owner
+      #        id: owner
+      #        uses: actions/migration-ci-action@v0.0.1
+      #        with:
+      #          owner: 'agneum'
       - name: Get the output status
         run: echo "Status ${{ steps.owner.outputs.status }}"
