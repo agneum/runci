@@ -12,7 +12,9 @@ echo $JSON_DATA
 curl -v --location --request POST "${CI_ENDPOINT}" \
 --header "Authorization-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
---data "${JSON_DATA}"
+--data '{ "repo": { "owner": "agneum", "repo": "runci", "ref": "master" }, "commands": [ "sqitch up", "echo Migration has been completed" ] }'
+
+#"${JSON_DATA}"
 
 status="OK"
 echo "::set-output name=status::$status"
