@@ -15,7 +15,7 @@ jobs:
           repo: 'runci'
           ref: 'master'
           commands:  |
-            sqitch up
+            sqitch deploy
             echo 'Migration has been completed'
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
