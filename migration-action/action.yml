@@ -19,8 +19,8 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.owner }}
-    - ${{ inputs.repo }}
-    - ${{ inputs.ref }}
-    - ${{ inputs.commands }}
+#  args:
+#    - ${{ inputs.owner }}
+#    - ${{ inputs.repo }}
+#    - ${{ inputs.ref }}
+#    - ${{ inputs.commands }}
