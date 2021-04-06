@@ -5,14 +5,14 @@ JSON_DATA=$(jq -n \
   --arg repo "$INPUT_REPO" \
   --arg ref "$INPUT_REF" \
   --arg commands "$INPUT_COMMANDS" \
-  '{owner: $owner, repo: $repo, ref: $ref, commands: $commands | rtrimstr("\n") | split("\n")}')
+  '{repo: {owner: $owner, repo: $repo, ref: $ref}, commands: $commands | rtrimstr("\n") | split("\n")}')
 
 echo $JSON_DATA
 
 curl -v --location --request POST "${CI_ENDPOINT}" \
---header 'Authorization-Token: "${SECRET_TOKEN}"' \
+--header "Authorization-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
---data-raw "${JSON_DATA}"
+--data "${JSON_DATA}"
 
 status="OK"
 echo "::set-output name=status::$status"
