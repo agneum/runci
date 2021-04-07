@@ -20,7 +20,7 @@ jobs:
 
       # Use public actions
       - name: DB migration with DLE
-        uses: agneum/migration-action@v0.0.1
+        uses: agneum/migration-action@v0.0.2
         id: db-migration
         with:
           owner: 'agneum'
