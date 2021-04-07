@@ -19,9 +19,9 @@ jobs:
 #            echo 'Migration has been completed'
 
       # Use public actions
-      - name: Check owner
-        id: owner
-        uses: actions/db-migration-with-dle@v0.0.1
+      - name: DB migration with DLE
+        uses: agneum/migration-action@v0.0.1
+        id: db-migration
         with:
           owner: 'agneum'
           repo: 'runci'
@@ -31,5 +31,6 @@ jobs:
             echo 'Migration has been completed'
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
+          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
       - name: Get the output status
-        run: echo "Status ${{ steps.owner.outputs.status }}"
+        run: echo "Status ${{ steps.db-migration.outputs.status }}"
