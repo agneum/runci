@@ -5,11 +5,23 @@ jobs:
     runs-on: ubuntu-latest
     name: CI migration
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Check owner
+#        id: owner
+#        uses: ./migration-action
+#        with:
+#          owner: 'agneum'
+#          repo: 'runci'
+#          ref: 'master'
+#          commands:  |
+#            sqitch deploy
+#            echo 'Migration has been completed'
+
+      # Use public actions
       - name: Check owner
         id: owner
-        uses: ./migration-action
+        uses: actions/db-migration-with-dle@v0.0.1
         with:
           owner: 'agneum'
           repo: 'runci'
@@ -19,12 +31,5 @@ jobs:
             echo 'Migration has been completed'
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
-
-      # Public actions
-      #      - name: Check owner
-      #        id: owner
-      #        uses: actions/migration-ci-action@v0.0.1
-      #        with:
-      #          owner: 'agneum'
       - name: Get the output status
         run: echo "Status ${{ steps.owner.outputs.status }}"

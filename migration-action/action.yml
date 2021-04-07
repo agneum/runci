@@ -11,7 +11,7 @@ inputs:
     description: 'The input represents a ref parameter, which can be a SHA, branch, or tag'
     required: true
   commands:
-    description: 'Set of commands to run DB migrations'
+    description: 'List of commands to run DB migrations'
     required: true
 outputs:
   status:
