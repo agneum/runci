@@ -8,7 +8,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check owner
-        id: owner
+        id: db-migration
         uses: ./migration-action
         with:
           commands:  |
