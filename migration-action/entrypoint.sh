@@ -14,8 +14,5 @@ response=$(curl -s --location --request POST "${CI_ENDPOINT}" \
 --header 'Content-Type: application/json' \
 --data "${JSON_DATA}")
 
-echo "Response"
-echo $response
-
-status="OK"
-echo "::set-output name=status::$status"
+echo "Response ${response}"
+echo "::set-output name=response::$response"
