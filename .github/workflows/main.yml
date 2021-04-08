@@ -1,15 +1,55 @@
 on: [ push ]
 
 jobs:
+  #DEBUG
+  one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJSON(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+
   migration_job:
     runs-on: ubuntu-latest
     name: CI migration
     steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Check owner
-#        id: owner
-#        uses: ./migration-action
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check owner
+        id: owner
+        uses: ./migration-action
+        with:
+          commands:  |
+            sqitch deploy
+            echo 'Migration has been completed'
+
+
+
+      # Use public actions
+#      - name: DB migration with DLE
+#        uses: agneum/migration-action@v0.0.2
+#        id: db-migration
 #        with:
 #          owner: 'agneum'
 #          repo: 'runci'
@@ -17,20 +57,8 @@ jobs:
 #          commands:  |
 #            sqitch deploy
 #            echo 'Migration has been completed'
-
-      # Use public actions
-      - name: DB migration with DLE
-        uses: agneum/migration-action@v0.0.2
-        id: db-migration
-        with:
-          owner: 'agneum'
-          repo: 'runci'
-          ref: 'master'
-          commands:  |
-            sqitch deploy
-            echo 'Migration has been completed'
-        env:
-          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
-          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+#        env:
+#          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
+#          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
       - name: Get the output status
         run: echo "Status ${{ steps.db-migration.outputs.status }}"

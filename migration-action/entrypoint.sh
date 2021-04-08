@@ -1,9 +1,9 @@
 #!/bin/sh -l
 
 JSON_DATA=$(jq -n -c \
-  --arg owner "$INPUT_OWNER" \
+  --arg owner "$GITHUB_REPOSITORY_OWNER" \
   --arg repo "$INPUT_REPO" \
-  --arg ref "$INPUT_REF" \
+  --arg ref "$GITHUB_REF" \
   --arg commands "$INPUT_COMMANDS" \
   '{repo: {owner: $owner, repo: $repo, ref: $ref}, commands: $commands | rtrimstr("\n") | split("\n")}')
 

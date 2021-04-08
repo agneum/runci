@@ -7,6 +7,7 @@ inputs:
   repo:
     description: 'The repo to check'
     required: true
+    default: ${{ github.event.repository.name }}
   ref:
     description: 'The input represents a ref parameter, which can be a SHA, branch, or tag'
     required: true
