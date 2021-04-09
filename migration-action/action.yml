@@ -4,23 +4,28 @@ inputs:
   owner:
     description: 'The owner of the repository to check'
     required: true
+    default: ${{ github.repository_owner }}
   repo:
     description: 'The repo to check'
     required: true
+    default: ${{ github.event.repository.name }}
   ref:
     description: 'The input represents a ref parameter, which can be a SHA, branch, or tag'
     required: true
+    default: ${{ github.ref }}
   commands:
-    description: 'Set of commands to run DB migrations'
+    description: 'List of commands to run DB migrations'
     required: true
+  dbname:
+    description: 'The database that the workflow is running with'
+    required: false
+    default: ""
+  migration_envs:
+    description: 'List of commands to run DB migrations'
+    required: false
 outputs:
   status:
     description: 'The result of CI checks'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.owner }}
-    - ${{ inputs.repo }}
-    - ${{ inputs.ref }}
-    - ${{ inputs.commands }}

@@ -1,17 +1,21 @@
 #!/bin/sh -l
 
-echo "Owner $1"
-
-JSON_DATA=$(jq -n \
+JSON_DATA=$(jq -n -c \
   --arg owner "$INPUT_OWNER" \
   --arg repo "$INPUT_REPO" \
   --arg ref "$INPUT_REF" \
-  '{owner: $owner, repo: $repo, ref: $ref}')
+  --arg commands "$INPUT_COMMANDS" \
+  --arg db_name "$INPUT_DBNAME" \
+  --arg actor "$GITHUB_ACTOR" \
+  --arg migration_envs "$INPUT_MIGRATION_ENVS" \
+  '{source: {owner: $owner, repo: $repo, ref: $ref}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
 
-curl --location --request POST '${CI_ENDPOINT}' \
---header 'Authorization-Token: secret_token' \
+echo $JSON_DATA
+
+response=$(curl -s --location --request POST "${CI_ENDPOINT}" \
+--header "Verification-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
---data-raw '${JSON_DATA}'
+--data "${JSON_DATA}")
 
-status="OK"
-echo "::set-output name=status::$status"
+echo "Response ${response}"
+echo "::set-output name=response::$response"
