@@ -13,7 +13,7 @@ JSON_DATA=$(jq -n -c \
 echo $JSON_DATA
 
 response=$(curl -s --location --request POST "${CI_ENDPOINT}" \
---header "Authorization-Token: ${SECRET_TOKEN}" \
+--header "Verification-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
 --data "${JSON_DATA}")
 
