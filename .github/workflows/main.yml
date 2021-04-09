@@ -11,9 +11,13 @@ jobs:
         id: db-migration
         uses: ./migration-action
         with:
+          dbname: test
           commands:  |
             sqitch deploy
+            env
             echo 'Migration has been completed'
+          migration_envs: |
+            DATABASE_LAB_CI=true
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
