@@ -3,5 +3,6 @@
 begin;
 
 create table abc (a int);
+create table new_table (a int);
 
 commit;
