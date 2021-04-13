@@ -21,7 +21,11 @@ jobs:
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
-
+      - name: Upload response
+        uses: actions/upload-artifact@v2
+        with:
+          name: migration_response
+          path: response.json
       # Use public actions
       #      - name: DB migration with DLE
       #        uses: agneum/migration-action@v0.0.4
