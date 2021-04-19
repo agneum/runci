@@ -4,4 +4,6 @@ begin;
 
 create table abc (a int);
 
+dddd;
+
 commit;
