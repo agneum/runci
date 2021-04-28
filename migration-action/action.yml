@@ -16,11 +16,17 @@ inputs:
   pull_request:
     description: 'Link to the pull request'
     required: false
-    default: ${{ github.event.pull_request._link.html.href }}
-  diff:
+#    default: ${{ github.event.pull_request._links.html.href }}
+    default: ${{ github.event.pull_request.html_url }}
+  compare:
     description: 'Compare'
     required: false
     default: ${{ github.event.compare }}
+  commit:
+    description: 'Commit'
+    required: false
+    default: ${{ github.event.after }}
+
   commands:
     description: 'List of commands to run DB migrations'
     required: true
