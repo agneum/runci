@@ -1,18 +1,10 @@
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   migration_job:
     runs-on: ubuntu-latest
     name: CI migration
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Dump job context
-        run: echo ${GITHUB_REF##*/}
-
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check owner
