@@ -12,8 +12,10 @@ JSON_DATA=$(jq -n -c \
 
 echo $JSON_DATA
 
-echo $GITHUB_JOB_COMPARE
+echo $GITHUB_EVENT_COMPARE
 echo ${GITHUB_REF##*/}
+
+env
 
 response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT}" --write-out "%{http_code}" \
 --header "Verification-Token: ${SECRET_TOKEN}" \
