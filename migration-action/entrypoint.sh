@@ -8,20 +8,13 @@ JSON_DATA=$(jq -n -c \
   --arg db_name "$INPUT_DBNAME" \
   --arg actor "$GITHUB_ACTOR" \
   --arg branch "${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}" \
-  --arg commit "${INPUT_COMMIT}" \
-  --arg diff "${INPUT_DIFF:-${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT}}" \
+  --arg commit_sha "${INPUT_COMMIT_SHA}" \
+  --arg commit "${INPUT_COMPARE:-${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}}" \
   --arg pull_request "$INPUT_PULL_REQUEST" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
-  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit: $commit, diff: $diff, pull_request: $pull_request}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
+  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, pull_request: $pull_request}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
 
 echo $JSON_DATA
-
-echo $INPUT_DIFF
-echo $INPUT_PULL_REQUEST
-echo $GITHUB_HEAD_REF
-echo ${GITHUB_REF##*/}
-
-env
 
 response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT}" --write-out "%{http_code}" \
 --header "Verification-Token: ${SECRET_TOKEN}" \
