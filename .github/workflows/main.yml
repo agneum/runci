@@ -5,27 +5,21 @@ jobs:
     runs-on: ubuntu-latest
     name: CI migration
     steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Check owner
-#        id: db-migration
-#        uses: ./migration-action
-#        with:
-#          dbname: test
-#          commands:  |
-#            sqitch deploy
-#            env
-#            echo 'Migration has been completed'
-#          migration_envs: |
-#            DATABASE_LAB_CI=true
-#        env:
-#          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
-#          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
-      # Use public actions
-      - name: DB migration with DLE
-        uses: agneum/migration-action@v0.0.4
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check owner
         id: db-migration
+        uses: ./migration-action
         with:
           dbname: test
           commands:  |
@@ -37,5 +31,21 @@ jobs:
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+
+      # Use public actions
+#      - name: DB migration with DLE
+#        uses: agneum/migration-action@v0.0.4
+#        id: db-migration
+#        with:
+#          dbname: test
+#          commands:  |
+#            sqitch deploy
+#            env
+#            echo 'Migration has been completed'
+#          migration_envs: |
+#            DATABASE_LAB_CI=true
+#        env:
+#          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
+#          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
       - name: Get the response status
         run: echo "${{ steps.db-migration.outputs.response }}"
