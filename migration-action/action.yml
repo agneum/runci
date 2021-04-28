@@ -16,7 +16,7 @@ inputs:
   pull_request:
     description: 'Link to the pull request'
     required: false
-    default: ${{ github._link.html.href }}
+    default: ${{ github.event.pull_request._link.html.href }}
   diff:
     description: 'Compare'
     required: false
