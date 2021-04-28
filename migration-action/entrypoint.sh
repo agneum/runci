@@ -9,8 +9,8 @@ JSON_DATA=$(jq -n -c \
   --arg actor "$GITHUB_ACTOR" \
   --arg branch "${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}" \
   --arg commit_sha "${INPUT_COMMIT_SHA}" \
-  --arg commit "${INPUT_COMPARE:-${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}}" \
-  --arg pull_request "$INPUT_PULL_REQUEST" \
+  --arg commit "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}" \
+  --arg pull_request "${INPUT_PULL_REQUEST:-$INPUT_COMPARE}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
   '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, pull_request: $pull_request}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
 
