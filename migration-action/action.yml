@@ -13,6 +13,10 @@ inputs:
     description: 'The input represents a ref parameter, which can be a SHA, branch, or tag'
     required: true
     default: ${{ github.ref }}
+  pull_request:
+    description: 'Link to the pull request'
+    required: false
+    default: ${{ github._link.html.href }}
   diff:
     description: 'Compare'
     required: false
