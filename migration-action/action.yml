@@ -13,6 +13,10 @@ inputs:
     description: 'The input represents a ref parameter, which can be a SHA, branch, or tag'
     required: true
     default: ${{ github.ref }}
+  diff:
+    description: 'Compare'
+    required: false
+    default: ${{ github.event.compare }}
   commands:
     description: 'List of commands to run DB migrations'
     required: true

@@ -7,12 +7,13 @@ JSON_DATA=$(jq -n -c \
   --arg commands "$INPUT_COMMANDS" \
   --arg db_name "$INPUT_DBNAME" \
   --arg actor "$GITHUB_ACTOR" \
+  --arg branch "${GITHUB_REF##*/}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
-  '{source: {owner: $owner, repo: $repo, ref: $ref}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
+  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
 
 echo $JSON_DATA
 
-echo $GITHUB_EVENT_COMPARE
+echo $INPUT_DIFF
 echo ${GITHUB_REF##*/}
 
 env
