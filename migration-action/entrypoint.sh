@@ -16,11 +16,13 @@ JSON_DATA=$(jq -n -c \
 
 echo $JSON_DATA
 
-response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT}/migration/run" --write-out "%{http_code}" \
+response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT_MIGRATION}" --write-out "%{http_code}" \
 --header "Verification-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
 --output response.json \
 --data "${JSON_DATA}")
+
+echo $response_code
 
 if [[ $response_code -ne 200 ]]; then
   echo "Invalid status code given: ${response_code}"
@@ -35,14 +37,19 @@ status=$(jq '.session.result.status' response.json)
 echo $status
 
 clone_id=$(jq '.clone_id' response.json)
+echo "CloneID: $status"
+
 session_id=$(jq '.session.id' response.json)
 
-cat response.json | jq -c '.session.artifacts[]' | while read object; do
-    api_call $artifact $session_id $clone_id
+echo ${session_id}
+
+cat response.json | jq -c '.session.artifacts[]' | while read artifact; do
+    echo "Run $artifact"
+    download_artifacts $artifact $session_id $clone_id
 done
 
 function download_artifacts() {
-    curl --show-error --silent "${CI_ENDPOINT}/artifact/download?artifact_type=$1&session_id=$2&clone_id=$3" --write-out "%{http_code}" \
+    curl --show-error --silent "${CI_ENDPOINT_ARTIFACT}?artifact_type=$1&session_id=$2&clone_id=$3" --write-out "%{http_code}" \
          --header "Verification-Token: ${SECRET_TOKEN}" \
          --header 'Content-Type: application/json' \
          --output artifacts/$1
