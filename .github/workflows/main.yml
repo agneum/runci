@@ -19,8 +19,15 @@ jobs:
           migration_envs: |
             DATABASE_LAB_CI=true
         env:
-          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
+          CI_ENDPOINT_MIGRATION: ${{ secrets.CI_ENDPOINT_MIGRATION }}
+          CI_ENDPOINT_ARTIFACT: ${{ secrets.CI_ENDPOINT_ARTIFACT }}
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: artifacts/*
 
       # Use public actions
 #      - name: DB migration with DLE
