@@ -75,7 +75,7 @@ cat response.json | jq -c -r '.session.artifacts[]' | while read artifact; do
 done
 
 # Stop the running clone
-response_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/stop?clone_id=$clone_id" --write-out "%{http_code}" \
+response_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/stop?clone_id=${clone_id}" --write-out "%{http_code}" \
      --header "Verification-Token: ${SECRET_TOKEN}" \
      --header 'Content-Type: application/json')
 
