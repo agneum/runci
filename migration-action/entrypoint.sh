@@ -22,8 +22,6 @@ response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPO
 --output response.json \
 --data "${JSON_DATA}")
 
-echo $response_code
-
 if [[ $response_code -ne 200 ]]; then
   echo "Invalid status code given: ${response_code}"
   exit 1
@@ -32,9 +30,9 @@ fi
 response=$(cat response.json)
 
 echo $response
+echo "::set-output name=response::$response"
 
 status=$(jq -r '.session.result.status' response.json)
-echo $status
 
 if [[ $status != "passed" ]]; then
   echo "Invalid status given: ${status}"
@@ -42,11 +40,7 @@ if [[ $status != "passed" ]]; then
 fi
 
 clone_id=$(jq -r '.clone_id' response.json)
-echo "CloneID: $clone_id"
-
 session_id=$(jq -r '.session.session_id' response.json)
-
-echo ${session_id}
 
 mkdir artifacts
 
@@ -56,14 +50,14 @@ download_artifacts() {
          --header 'Content-Type: application/json' \
          --output artifacts/$1)
 
-    echo "Artifact code: $artifact_code"
+    if [[ $artifact_code -ne 200 ]]; then
+      echo "Downloading $1, invalid status code given: ${artifact_code}"
+      return
+    fi
+
     echo "Artifact \"$1\" has been downloaded to the artifacts directory"
 }
 
 cat response.json | jq -c -r '.session.artifacts[]' | while read artifact; do
-    echo "Run $artifact"
     download_artifacts $artifact $session_id $clone_id
 done
-
-
-echo "::set-output name=response::$response"
