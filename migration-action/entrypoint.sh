@@ -33,18 +33,18 @@ response=$(cat response.json)
 
 echo $response
 
-status=$(jq '.session.result.status' response.json)
+status=$(jq -r '.session.result.status' response.json)
 echo $status
 
-if [[ ! $status == "passed" ]]; then
+if [[ $status != "passed" ]]; then
   echo "Invalid status given: ${status}"
-  exit 1 
+  exit 1
 fi
 
-clone_id=$(jq '.clone_id' response.json)
+clone_id=$(jq -r '.clone_id' response.json)
 echo "CloneID: $clone_id"
 
-session_id=$(jq '.session.session_id' response.json)
+session_id=$(jq -r '.session.session_id' response.json)
 
 echo ${session_id}
 
