@@ -80,5 +80,5 @@ response_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/stop?clone_i
      --header 'Content-Type: application/json')
 
 if [[ $response_code -ne 200 ]]; then
-  echo "Downloading $1, invalid status code given: ${artifact_code}"
+  echo "Invalid status code given on destroy clone: ${artifact_code}"
 fi
