@@ -1,9 +1,9 @@
 #!/bin/sh -l
 
-SHOULD_DOWNLOAD=false
+KEEP_CLONE=false
 
 if [[ "${INPUT_DOWNLOAD_ARTIFACTS}" == "true" ]]; then
-  SHOULD_DOWNLOAD = true
+  KEEP_CLONE = true
 fi
 
 JSON_DATA=$(jq -n -c \
@@ -18,7 +18,7 @@ JSON_DATA=$(jq -n -c \
   --arg commit "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}" \
   --arg request_link "${INPUT_PULL_REQUEST:-$INPUT_COMPARE}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
-  --argjson keep_clone $SHOULD_DOWNLOAD \
+  --argjson keep_clone $KEEP_CLONE \
   '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, request_link: $request_link}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n"), keep_clone: $keep_clone}')
 
 echo $JSON_DATA
@@ -49,7 +49,7 @@ fi
 clone_id=$(jq -r '.clone_id' response.json)
 session_id=$(jq -r '.session.session_id' response.json)
 
-if [[ ! $SHOULD_DOWNLOAD ]]; then
+if [[ ! $KEEP_CLONE ]]; then
   exit 0
 fi
 
