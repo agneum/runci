@@ -12,11 +12,11 @@ JSON_DATA=$(jq -n -c \
   --arg commit "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}" \
   --arg request_link "${INPUT_PULL_REQUEST:-$INPUT_COMPARE}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
-  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, request_link: $request_link}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
+  '{keep_clone: true, source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, request_link: $request_link}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
 
 echo $JSON_DATA
 
-response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT_MIGRATION}" --write-out "%{http_code}" \
+response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT}/migration/run" --write-out "%{http_code}" \
 --header "Verification-Token: ${SECRET_TOKEN}" \
 --header 'Content-Type: application/json' \
 --output response.json \
@@ -49,7 +49,7 @@ cat response.json | jq -c '.session.artifacts[]' | while read artifact; do
 done
 
 function download_artifacts() {
-    curl --show-error --silent "${CI_ENDPOINT_ARTIFACT}?artifact_type=$1&session_id=$2&clone_id=$3" --write-out "%{http_code}" \
+    curl --show-error --silent "${CI_ENDPOINT}/artifact/download?artifact_type=$1&session_id=$2&clone_id=$3" --write-out "%{http_code}" \
          --header "Verification-Token: ${SECRET_TOKEN}" \
          --header 'Content-Type: application/json' \
          --output artifacts/$1
