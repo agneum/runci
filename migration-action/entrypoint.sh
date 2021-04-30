@@ -36,9 +36,9 @@ echo $response
 status=$(jq '.session.result.status' response.json)
 echo $status
 
-if [[ $status != "passed" ]]; then
+if [[ ! $status == "passed" ]]; then
   echo "Invalid status given: ${status}"
-  exit 1
+  exit 1 
 fi
 
 clone_id=$(jq '.clone_id' response.json)
