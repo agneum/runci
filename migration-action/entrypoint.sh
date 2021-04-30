@@ -36,7 +36,7 @@ echo $response
 status=$(jq '.session.result.status' response.json)
 echo $status
 
-if [[ $status -ne "passed" ]]; then
+if [[ $status != "passed" ]]; then
   echo "Invalid status given: ${status}"
   exit 1
 fi
@@ -58,7 +58,7 @@ download_artifacts() {
     echo "Artifact \"$1\" has been downloaded to the artifacts directory"
 }
 
-cat response.json | jq -c '.session.artifacts[]' | while read artifact; do
+cat response.json | jq -c -r '.session.artifacts[]' | while read artifact; do
     echo "Run $artifact"
     download_artifacts $artifact $session_id $clone_id
 done
