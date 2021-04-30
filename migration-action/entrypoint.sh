@@ -48,6 +48,8 @@ session_id=$(jq -r '.session.session_id' response.json)
 
 echo ${session_id}
 
+mkdir artifacts
+
 download_artifacts() {
     artifact_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/download?artifact_type=$1&session_id=$2&clone_id=$3" --write-out "%{http_code}" \
          --header "Verification-Token: ${SECRET_TOKEN}" \
