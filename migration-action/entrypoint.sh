@@ -3,7 +3,7 @@
 KEEP_CLONE=false
 
 if [[ "${INPUT_DOWNLOAD_ARTIFACTS}" == "true" ]]; then
-  KEEP_CLONE = true
+  KEEP_CLONE=true
 fi
 
 JSON_DATA=$(jq -n -c \
