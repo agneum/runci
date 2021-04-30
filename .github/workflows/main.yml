@@ -12,7 +12,7 @@ jobs:
         uses: ./migration-action
         with:
           dbname: test
-          commands:  |
+          commands: |
             sqitch deploy
             env
             echo 'Migration has been completed'
@@ -25,8 +25,9 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-#          name: artifacts
+          name: artifacts
           path: artifacts/*
+          if-no-files-found: ignore
 
       # Use public actions
 #      - name: DB migration with DLE

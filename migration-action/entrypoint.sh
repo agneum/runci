@@ -12,7 +12,8 @@ JSON_DATA=$(jq -n -c \
   --arg commit "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}" \
   --arg request_link "${INPUT_PULL_REQUEST:-$INPUT_COMPARE}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
-  '{keep_clone: true, source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, request_link: $request_link}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n")}')
+  --arg keep_clone "$INPUT_DOWNLOAD_ARTIFACTS" \
+  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, commit_sha: $commit_sha, commit: $commit, request_link: $request_link}, actor: $actor, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n"), keep_clone: $keep_clone}')
 
 echo $JSON_DATA
 
@@ -42,6 +43,11 @@ fi
 clone_id=$(jq -r '.clone_id' response.json)
 session_id=$(jq -r '.session.session_id' response.json)
 
+if [[ ! $INPUT_DOWNLOAD_ARTIFACTS ]]; then
+  exit 0
+fi
+
+# Download artifacts
 mkdir artifacts
 
 download_artifacts() {
@@ -61,3 +67,12 @@ download_artifacts() {
 cat response.json | jq -c -r '.session.artifacts[]' | while read artifact; do
     download_artifacts $artifact $session_id $clone_id
 done
+
+# Stop the running clone
+response_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/stop?clone_id=$clone_id" --write-out "%{http_code}" \
+     --header "Verification-Token: ${SECRET_TOKEN}" \
+     --header 'Content-Type: application/json')
+
+if [[ $response_code -ne 200 ]]; then
+  echo "Downloading $1, invalid status code given: ${artifact_code}"
+fi
