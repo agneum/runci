@@ -25,14 +25,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: |
-            artifacts
-            pg_stat_statements
-            pg_unknown
-          path: |
-            artifacts/*
-            artifacts/pg_stat_statements
-            artifacts/pg_unknown
+#          name: artifacts
+          path: artifacts/*
 
       # Use public actions
 #      - name: DB migration with DLE
