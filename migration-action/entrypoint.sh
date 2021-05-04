@@ -29,15 +29,15 @@ response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPO
 --output response.json \
 --data "${JSON_DATA}")
 
-if [[ $response_code -ne 200 ]]; then
-  echo "Invalid status code given: ${response_code}"
-  exit 1
-fi
-
 response=$(cat response.json)
 
 echo $response
 echo "::set-output name=response::$response"
+
+if [[ $response_code -ne 200 ]]; then
+  echo "Invalid status code given: ${response_code}"
+  exit 1
+fi
 
 status=$(jq -r '.session.result.status' response.json)
 
