@@ -29,8 +29,6 @@ response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPO
 --output response.json \
 --data "${JSON_DATA}")
 
-jq . response.json
-
 response=$(cat response.json)
 echo "::set-output name=response::$response"
 
