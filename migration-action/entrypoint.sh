@@ -29,9 +29,9 @@ response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPO
 --output response.json \
 --data "${JSON_DATA}")
 
-response=$(cat response.json)
+jq . response.json
 
-jq . $response
+response=$(cat response.json)
 echo "::set-output name=response::$response"
 
 if [[ $response_code -ne 200 ]]; then
