@@ -31,7 +31,7 @@ response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPO
 
 response=$(cat response.json)
 
-echo $response
+jq . $response
 echo "::set-output name=response::$response"
 
 if [[ $response_code -ne 200 ]]; then
