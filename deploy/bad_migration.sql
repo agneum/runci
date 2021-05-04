@@ -3,6 +3,6 @@
 BEGIN;
 
 -- XXX Add DDLs here.
-DROP index unknown_index;
+-- DROP index unknown_index;
 
 COMMIT;
