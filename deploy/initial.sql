@@ -28,8 +28,8 @@ begin
 end;
 $$ language plpgsql;
 
-select test_scalability(200);
+-- select test_scalability(100);
 
-select * from def;
+-- select * from def;
 
 commit;
