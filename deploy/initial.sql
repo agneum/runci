@@ -4,28 +4,30 @@ begin;
 
 create table abc (a int);
 
-CREATE OR REPLACE FUNCTION test_scalability (n INT)
- RETURNS VOID AS
+create or replace function test_scalability(n int)
+  returns void as
 $$
-BEGIN
-  FOR iter IN 0..(n-1) LOOP
+begin
+  for iter in 0..(n - 1)
+    loop
+      execute 'create table abc_' || iter || ' (a int, b text, c text)';
 
-      EXECUTE 'create table abc_'|| iter || ' (a int, b text, c text)';
+      for sec in 0..100
+        loop
+          execute 'insert into abc_' || iter || ' values (' || sec || ', md5(random()::text), md5(random()::text))';
+        end loop;
 
-      FOR sec IN 0..100 LOOP
-          EXECUTE 'INSERT INTO abc_'|| iter || ' VALUES ('|| sec ||', md5(random()::text), md5(random()::text))';
-      END LOOP;
+      for sec in 0..2
+        loop
+          execute 'create index idx_abc_' || iter || '_' || sec || '_a on abc_' || iter || ' (a)';
+          execute 'create index idx_abc_' || iter || '_' || sec || '_b on abc_' || iter || ' (b)';
+          execute 'create index idx_abc_' || iter || '_' || sec || '_c on abc_' || iter || ' (c)';
+        end loop;
 
-      FOR sec IN 0..2 LOOP
-          EXECUTE 'create index idx_abc_'|| iter || '_' || sec ||'_a on abc_' || iter || ' (a)';
-          EXECUTE 'create index idx_abc_'|| iter || '_' || sec ||'_b on abc_' || iter || ' (b)';
-          EXECUTE 'create index idx_abc_'|| iter || '_' || sec ||'_c on abc_' || iter || ' (c)';
-        END LOOP;
+    end loop;
+end;
+$$ language plpgsql;
 
-  END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
-select test_scalability(100);
+select test_scalability(200);
 
 commit;
