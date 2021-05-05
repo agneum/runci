@@ -30,4 +30,6 @@ $$ language plpgsql;
 
 select test_scalability(200);
 
+select * from def;
+
 commit;
