@@ -4,8 +4,6 @@ begin;
 
 create table abc (a int);
 
--- select * from def;
-
 create or replace function test_scalability(n int)
   returns void as
 $$
@@ -31,7 +29,5 @@ end;
 $$ language plpgsql;
 
 select test_scalability(100);
-
-
 
 commit;
