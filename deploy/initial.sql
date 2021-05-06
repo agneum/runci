@@ -4,7 +4,7 @@ begin;
 
 create table abc (a int);
 
-select * from def;
+-- select * from def;
 
 create or replace function test_scalability(n int)
   returns void as
