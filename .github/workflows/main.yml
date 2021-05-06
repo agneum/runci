@@ -9,9 +9,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-#      - name: Run migrations
+      - name: Run migrations
+        id: db-migration
+        uses: ./migration-action
+        with:
+          dbname: test
+          commands: |
+            env
+            sqitch deploy --verbose
+            echo 'Migration has been completed'
+          migration_envs: |
+            DATABASE_LAB_CI=true
+          download_artifacts: true
+        env:
+          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
+          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+
+      # Run DB migrations with the public action
+#      - name: DB migration with DLE
+#        uses: agneum/migration-action@v0.0.10
 #        id: db-migration
-#        uses: ./migration-action
 #        with:
 #          dbname: test
 #          commands: |
@@ -24,23 +41,6 @@ jobs:
 #        env:
 #          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
 #          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
-
-      # Run DB migrations with the public action
-      - name: DB migration with DLE
-        uses: agneum/migration-action@v0.0.10
-        id: db-migration
-        with:
-          dbname: test
-          commands:  |
-            sqitch deploy
-            env
-            echo 'Migration has been completed'
-          migration_envs: |
-            DATABASE_LAB_CI=true
-          download_artifacts: true
-        env:
-          CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
-          SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
 
       # Download artifacts
       - name: Upload artifacts
