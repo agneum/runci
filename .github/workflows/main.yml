@@ -49,6 +49,7 @@ jobs:
           name: artifacts
           path: artifacts/*
           if-no-files-found: ignore
+        if: always()
 
       # Show migration summary
       - name: Get the response status
