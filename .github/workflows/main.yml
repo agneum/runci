@@ -17,6 +17,7 @@ jobs:
           commands: |
             env
             sqitch deploy --verbose
+            sqitch revert --verbose
             echo 'Migration has been completed'
           migration_envs: |
             DATABASE_LAB_CI=true
