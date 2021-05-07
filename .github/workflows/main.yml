@@ -17,6 +17,7 @@ jobs:
           commands: |
             env
             sqitch deploy --verbose
+            sqitch revert --verbose
             echo 'Migration has been completed'
           migration_envs: |
             DATABASE_LAB_CI=true
@@ -49,6 +50,7 @@ jobs:
           name: artifacts
           path: artifacts/*
           if-no-files-found: ignore
+        if: always()
 
       # Show migration summary
       - name: Get the response status
