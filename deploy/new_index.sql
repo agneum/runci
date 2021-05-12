@@ -3,6 +3,6 @@
 BEGIN;
 
 create table demo_table(a int);
-create index demo_idx on demo_table3 (a);
+create index demo_idx on demo_table (a);
 
 COMMIT;
