@@ -21,6 +21,9 @@ jobs:
           migration_envs: |
             DATABASE_LAB_CI=true
           download_artifacts: true
+          observation_interval: "10"
+          max_lock_duration: "10"
+          max_duration: "3600"
         env:
           CI_ENDPOINT: ${{ secrets.CI_ENDPOINT }}
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
