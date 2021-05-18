@@ -19,17 +19,13 @@ JSON_DATA=$(jq -n -c \
   --arg commit "${INPUT_COMMIT_SHA}" \
   --arg commit_link "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${INPUT_COMMIT_SHA}" \
   --arg request_link "${INPUT_PULL_REQUEST}" \
-  --arg diff_link "${$INPUT_COMPARE}" \
+  --arg diff_link "${INPUT_COMPARE}" \
   --arg migration_envs "$INPUT_MIGRATION_ENVS" \
   --arg observation_interval "$INPUT_OBSERVATION_INTERVAL" \
   --arg max_lock_duration "$INPUT_MAX_LOCK_DURATION" \
   --arg max_duration "$INPUT_MAX_DURATION" \
-  --argjson keep_clone $KEEP_CLONE \
-  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, branch_link: $branch_link, commit: $commit, commit_link: $commit_link,
-  request_link: $request_link, diff_link: $diff_link}, username: $username, username_link: $username_link, db_name: $db_name,
-  commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n"),
-  observation_config: { observation_interval: $observation_interval|tonumber, max_lock_duration: $max_lock_duration|tonumber,
-  max_duration: $max_duration|tonumber}, keep_clone: $keep_clone}')
+  --argjson keep_clone "$KEEP_CLONE" \
+  '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, branch_link: $branch_link, commit: $commit, commit_link: $commit_link,  request_link: $request_link, diff_link: $diff_link}, username: $username, username_link: $username_link, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n"), observation_config: { observation_interval: $observation_interval|tonumber, max_lock_duration: $max_lock_duration|tonumber, max_duration: $max_duration|tonumber}, keep_clone: $keep_clone}')
 
 echo $JSON_DATA
 
