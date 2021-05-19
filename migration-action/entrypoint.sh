@@ -13,7 +13,7 @@ JSON_DATA=$(jq -n -c \
   --arg commands "$INPUT_COMMANDS" \
   --arg db_name "$INPUT_DBNAME" \
   --arg username "$GITHUB_ACTOR" \
-  --arg username_full "$INPUT_ACTOR_NAME" \
+  --arg username_full "$INPUT_AUTHOR_NAME" \
   --arg username_link "${GITHUB_SERVER_URL}/$GITHUB_ACTOR" \
   --arg branch "${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}" \
   --arg branch_link "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}" \
