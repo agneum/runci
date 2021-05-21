@@ -28,6 +28,7 @@ JSON_DATA=$(jq -n -c \
   --argjson keep_clone "$KEEP_CLONE" \
   '{source: {owner: $owner, repo: $repo, ref: $ref, branch: $branch, branch_link: $branch_link, commit: $commit, commit_link: $commit_link, request_link: $request_link, diff_link: $diff_link}, username: $username, username_full: $username_full, username_link: $username_link, db_name: $db_name, commands: $commands | rtrimstr("\n") | split("\n"), migration_envs: $migration_envs | rtrimstr("\n") | split("\n"), observation_config: { observation_interval: $observation_interval|tonumber, max_lock_duration: $max_lock_duration|tonumber, max_duration: $max_duration|tonumber}, keep_clone: $keep_clone}')
 
+
 echo $JSON_DATA
 
 response_code=$(curl --show-error --silent --location --request POST "${CI_ENDPOINT}/migration/run" --write-out "%{http_code}" \
