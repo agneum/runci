@@ -74,12 +74,16 @@ download_artifacts() {
       return
     fi
 
+    cat artifact/$1
+
     echo "Artifact \"$1\" has been downloaded to the artifacts directory"
 }
 
 cat response.json | jq -c -r '.session.artifacts[]' | while read artifact; do
     download_artifacts $artifact $session_id $clone_id
 done
+
+exit 0
 
 # Stop the running clone
 response_code=$(curl --show-error --silent "${CI_ENDPOINT}/artifact/stop?clone_id=${clone_id}" --write-out "%{http_code}" \
