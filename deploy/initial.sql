@@ -1,5 +1,5 @@
 -- deploy runci:initial to pg
-
+-- test GH Actions
 begin;
 
 create table abc (a int);
