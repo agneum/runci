@@ -1,7 +1,7 @@
 -- deploy runci:initial to pg
 
 begin;
-
+zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 create table abc (a int);
 
 create or replace function test_scalability(n int)
